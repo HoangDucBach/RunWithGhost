@@ -1,15 +1,27 @@
-OBJS= main.cpp Background.cpp Boss.cpp Character.cpp\
-			Complete.cpp Function.cpp Game.cpp Home.cpp\
-			main.cpp Object.cpp Settings.cpp Tutorial.cpp\
-			Widgets.cpp
-CC=g++
-LIBFLAGS = -lmingw32 -lSDL2main -lSDL2 -lSDL2_mixer  -lSDL2_image -lSDL2_ttf 
-INCLUDESDL2 = -IC:/Library/SDL2/include 
-INCLUDEMIXER = -IC:/Library/SDL2_Mixer/include
-INCLUDEIMG=-IC:/Library/SDL2_IMG/include
-INCLUDETTF = -IC:/Library/SDL2_TTF/include
-OBJSBUILD = RunWithGhost.exe
+#OBJS specifies which files to compile as part of the project
+OBJS = Background.cpp Boss.cpp Complete.cpp Character.cpp Function.cpp Game.cpp Home.cpp main.cpp Object.cpp Settings.cpp Tutorial.cpp Widgets.cpp
 
+#CC specifies which compiler we're using
+CC = g++
+
+#INCLUDE_PATHS specifies the additional include paths we'll need
+INCLUDE_PATHS = -IC:/Include
+
+#LIBRARY_PATHS specifies the additional library paths we'll need
+LIBRARY_PATHS = -LC:/Library
+
+#COMPILER_FLAGS specifies the additional compilation options we're using
+# -w suppresses all warnings
+# -Wl,-subsystem,windows gets rid of the console window
+COMPILER_FLAGS = -w 
+# -Wl,-subsystem,windows
+
+#LINKER_FLAGS specifies the libraries we're linking against
+LINKER_FLAGS = -lmingw32 -lSDL2main -lSDL2 -lSDL2_image -lSDL2_ttf -lSDL2_mixer
+
+#OBJ_NAME specifies the name of our exectuable
+OBJ_NAME = RunWithGhost.exe
+
+#This is the target that compiles our executable
 all : $(OBJS)
-	$(CC) $(OBJS) $(INCLUDESDL2) $(INCLUDEMIXER) $(INCLUDEIMG)  $(INCLUDETTF) \
-	-w $(LIBFLAGS) -o $(OBJSBUILD)
+	$(CC) $(OBJS) $(INCLUDE_PATHS) $(LIBRARY_PATHS) $(COMPILER_FLAGS) $(LINKER_FLAGS) -o $(OBJ_NAME)
