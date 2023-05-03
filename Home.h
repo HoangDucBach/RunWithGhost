@@ -4,7 +4,6 @@
 #include"Function.h"
 #include"Game.h"
 #include"Tutorial.h"
-#include"Settings.h"
 class Home
 {
 private:

@@ -1,8 +1,7 @@
 #ifndef TUTORIAL_H
 #define TUTORIAL_H
 
-#include"Function.h"
-#include"AllHeader.h"
+#include"Widgets.h"
 #include"Settings.h"
 class Tutorial
 {

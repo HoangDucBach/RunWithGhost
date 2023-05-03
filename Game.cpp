@@ -1,4 +1,3 @@
-#include"Function.h"
 #include"Game.h"
 Game::~Game()
 {

@@ -2,9 +2,8 @@
 #define COMPLETE_H
 
 #include"Function.h"
-#include"Button.h"
+#include"Widgets.h"
 #include"Character.h"
-#include"Sound.h"
 class Complete
 {
 private:

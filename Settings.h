@@ -1,8 +1,7 @@
 #ifndef SETTINGS_H
 #define SETTINGS_H
 
-#include"Function.h"
-#include"AllHeader.h"
+#include"Widgets.h"
 class Settings
 {
 private:

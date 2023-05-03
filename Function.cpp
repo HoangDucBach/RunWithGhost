@@ -1,8 +1,5 @@
 #include"Function.h"
 #include"Background.h"
-#include"Mouse.h"
-#include"Button.h"
-#include"Music.h"
 using namespace std;
 std::string to_string(int number)
 {

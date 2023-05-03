@@ -1,5 +1,4 @@
 #include"Character.h"
-#include"Function.h"
 const int CHARACTER_WIDTH = 30;
 const int CHARACTER_HEIGHT = 90;
 

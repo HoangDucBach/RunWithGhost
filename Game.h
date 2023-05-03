@@ -2,7 +2,6 @@
 #define GAME_H
 
 #include"AllHeader.h"
-#include"Settings.h"
 class Game
 {
 private:

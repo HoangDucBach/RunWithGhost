@@ -3,7 +3,6 @@
 
 #include"Function.h"
 #include"Character.h"
-#include"Bullet.h"
 class Boss
 {
 private:
@@ -21,6 +20,19 @@ public:
 	void BossCatch(Character& character, bool& play);
 	void ResetDefault();
 	void DestroyBoss();
+};
+class Bullet
+{
+private:
+	SDL_Texture* tex = NULL;
+public:
+	Bullet();
+	~Bullet();
+	SDL_Rect rect;
+	float x_float, y_float;
+	void SetBullet(SDL_Renderer* screen);
+	void RenderCopy(SDL_Renderer* screen);
+	void DestroyBullet();
 };
 class BossRambo
 {

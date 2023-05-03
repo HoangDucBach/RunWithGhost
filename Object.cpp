@@ -2,6 +2,8 @@
 
 int fpsframe = 0;
 // Class Object
+//
+//
 Object::Object(const SDL_Rect &rect) 
 {
 	this->rect = rect;
@@ -92,29 +94,6 @@ void Object::ImpactObject(Character& character,int &speed,bool& shield ,bool& pl
 			character.aleft = 0;
 			character.aright = 0;
 		}
-		//if (SDL_IntersectRect(&rect, &temp, &check) && !mini && abs(temp.x + temp.w / 2 - (rect.x + rect.w / 2)) < 30)
-		//{
-		//	if (check.w * check.h >= temp.w * temp.h && temp.y - rect.y >= 0.5 * rect.h)
-		//	{
-		//		/*speed = 0;*/
-		//		play = false;
-		//		character.aleft = 0;
-		//		character.aright = 0;
-		//	}
-		//}
-		//if (mini)
-		//{
-		//	if (SDL_IntersectRect(&rect, &temp, &check))
-		//	{
-		//		if (check.w * check.h > 50 && abs(temp.y - rect.y) < 20 && abs(temp.x + temp.w / 2 - (rect.x + rect.w / 2)) < 20)
-		//		{
-		//			/*speed = 0;*/
-		//			play = false;
-		//			character.aleft = 0;
-		//			character.aright = 0;
-		//		}
-		//	}
-		//}
 	}
 }
 void Object::ResetDefault(const std::pair<int, int>& rect)
@@ -127,7 +106,195 @@ void Object::DestroyObject()
 {
 	SDL_DestroyTexture(this->tex);
 }
-//
+//Blade
+// 
+// 
+void Blade::SetBlade(SDL_Renderer* screen, const bool& vertical)
+{
+	//Set Ver or Hoz
+	this->vertical = vertical;
+	//Set Detail
+	this->rect.x = ((Random(0, 1)) ? 0 : 1600);
+	this->rect.y = 1000;
+	this->rect.w = 40;
+	this->rect.h = 40;
+
+	//Set Link
+	tex = LoadIMG(screen, "Img/Blade.png");
+	if (vertical)
+	{
+		texhub = LoadIMG(screen, "Img/Hub Vertical.png");
+		this->recthub.x = Random(-1000, -100);
+		this->recthub.y = 0;
+		this->recthub.w = 4;
+		this->recthub.h = 960;
+	}
+	else
+	{
+		texhub = LoadIMG(screen, "Img/Hub.png");
+		this->recthub.x = 0;
+		this->recthub.y = Random(1000, 5000);
+		this->recthub.w = 1600;
+		this->recthub.h = 4;
+	}
+	//Set Frame
+	for (int i = 0; i < 8; i++)
+	{
+		rectframe[i] = { 0,i * 40,40,40 };
+	}
+}
+void Blade::ImpactBlade(Character& character, bool& play, bool& shield)
+{
+	SDL_Rect temp = character.GetRect();
+	SDL_Rect check;
+	if (play && !shield)
+	{
+		if ((temp.x + temp.w / 2) >= rect.x && temp.x <= (rect.x + rect.w) && (temp.y + temp.h) > (rect.y + 1 / 2 * rect.h) && SDL_HasIntersection(&temp, &rect))
+		{
+			play = false;
+			character.aleft = 0;
+			character.aright = 0;
+		}
+	}
+}
+void Blade::AnimationBlade(const float& speed)
+{
+	if (vertical)
+	{
+		if (!change)
+			this->rect.y -= 3;
+		else
+			this->rect.y += 3;
+		if (this->rect.y <= 0)
+			change = true;
+		if (this->rect.y >= 960)
+			change = false;
+		x_float += speed;
+		this->rect.x = (int)x_float;
+		if (rect.x >= 1700)
+		{
+			x_float = Random(-1000, -1500);
+		}
+		fps++;
+		this->recthub.y = 0;
+		this->recthub.x = this->rect.x + this->rect.w / 2;
+	}
+	else
+	{
+		if (!change)
+			this->rect.x += 3;
+		else
+			this->rect.x -= 3;
+		if (this->rect.x >= 1700)
+			change = true;
+		if (this->rect.x <= 0)
+			change = false;
+		y_float -= speed;
+		this->rect.y = (int)y_float;
+		if (rect.y <= -150)
+		{
+			y_float = Random(1000, 5000);
+		}
+		fps++;
+		this->recthub.x = 0;
+		this->recthub.y = this->rect.y + this->rect.h / 2;
+	}
+}
+void Blade::RenderCopy(SDL_Renderer* screen)
+{
+	if (fps % 1 == 0)
+	{
+		framecount++;
+		fps = 1;
+	}
+	if (framecount == 7)
+		framecount = 0;
+	SDL_Rect* currentframe = &rectframe[framecount];
+	SDL_RenderCopy(screen, texhub, NULL, &recthub);
+	SDL_RenderCopy(screen, tex, currentframe, &rect);
+}
+void Blade::ResetDefault()
+{
+	//Reset Detail
+	this->rect.x = 0;
+	this->rect.y = 1000;
+	this->rect.w = 40;
+	this->rect.h = 40;
+
+	this->x_float = this->rect.x;
+	this->y_float = this->rect.y;
+	if (vertical)
+	{
+		this->recthub.x = -100;
+		this->recthub.y = 0;
+		this->recthub.w = 4;
+		this->recthub.h = 960;
+	}
+	else
+	{
+		this->recthub.x = 0;
+		this->recthub.y = 1000;
+		this->recthub.w = 1600;
+		this->recthub.h = 4;
+	}
+}
+//Fire
+// 
+// 
+// 
+void Fire::SetFire(SDL_Renderer* screen)
+{
+	//Set Detail
+	rect.w = 1725;
+	rect.h = 1725;
+	rect.x = SCREEN_WIDTH / 2 - rect.w / 2;
+	rect.y = SCREEN_HEIGHT / 2 - rect.h / 2;
+
+	r = rect.w / 2;
+	//Set Link
+	tex = LoadIMG(screen, "Img/Fire.png");
+}
+void Fire::RenderCopy(SDL_Renderer* screen)
+{
+	if (time)
+		SDL_RenderCopy(screen, tex, NULL, &rect);
+}
+void Fire::Minimum()
+{
+	if (r >= 100)
+	{
+		fps++;
+		if (fps % 5 == 0)
+		{
+			rect.w -= 1;
+			rect.h -= 1;
+			fps = 1;
+		}
+	}
+	else
+		time--;
+	r = rect.w / 2;
+	if (time == 0)
+		RUN = false;
+	rect.x = SCREEN_WIDTH / 2 - r;
+	rect.y = SCREEN_HEIGHT / 2 - r;
+}
+void Fire::CheckDanger(Character& character, bool& play)
+{
+	if (Distance(rect, character.GetRect()) > r)
+		play = false;
+}
+void Fire::ResetDefault()
+{
+	//Reset Detail
+	rect.w = 1725;
+	rect.h = 1725;
+	rect.x = SCREEN_WIDTH / 2 - rect.w / 2;
+	rect.y = SCREEN_HEIGHT / 2 - rect.h / 2;
+
+	r = rect.w / 2;
+	RUN = false;
+}
 //
 //
 // Class ObjectCollect

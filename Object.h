@@ -1,7 +1,6 @@
 #ifndef OBJECT_H
 #define OBJECT_H
 
-#include"Function.h"
 #include"Character.h"
 
 class Object
@@ -29,6 +28,45 @@ public:
 	void ResetDefault(const std::pair<int,int> & rect);
 	void DestroyObject();
 };
+class Blade
+{
+private:
+	SDL_Texture* tex, * texhub;
+	SDL_Rect rect, recthub;
+	SDL_Rect rectframe[8];
+	float x_float, y_float;
+	int framecount = 0, fps = 1;
+	bool vertical, change = false;
+public:
+	void SetBlade(SDL_Renderer* screen, const bool& vertical);
+	void RenderCopy(SDL_Renderer* screen);
+	void AnimationBlade(const float& speed);
+	void ImpactBlade(Character& character, bool& play, bool& shield);
+	void ResetDefault();
+};
+//Fire
+// 
+// 
+class Fire
+{
+private:
+	SDL_Texture* tex;
+	SDL_Rect rect;
+	float x_float, y_float, w_float, h_float;
+	float r;
+	int fps = 0;
+	int time = 300;
+public:
+	bool RUN = false;
+	void SetFire(SDL_Renderer* screen);
+	void RenderCopy(SDL_Renderer* screen);
+	void CheckDanger(Character& character, bool& play);
+	void Minimum();
+	void ResetDefault();
+};
+//Object Collect
+//
+//
 class ObjectCollect
 {
 private:

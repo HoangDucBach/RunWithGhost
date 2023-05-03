@@ -1,14 +1,12 @@
 #include"Function.h"
 #include"Background.h"
-#include"Mouse.h"
-#include"Button.h"
-#include"Music.h"
 #include"Character.h"
 #include"Game.h"
 #include"Object.h"
 #include"Boss.h"
 #include"Complete.h"
 #include"Home.h"
+#include"Widgets.h"
 using namespace std;
 //Declare
 Uint32 elap = 0;

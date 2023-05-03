@@ -1,4 +1,3 @@
-#include "Function.h"
 #include"Background.h"
 Background::Background()
 {
