@@ -31,7 +31,7 @@ bool InitData()
 	}
 	Mix_Init(MIX_INIT_MP3);
 	SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "1");
-	window = SDL_CreateWindow("Game Project UET", 
+	window = SDL_CreateWindow("Run With Ghost", 
 												SDL_WINDOWPOS_CENTERED,
 												SDL_WINDOWPOS_CENTERED,
 												SCREEN_WIDTH, 
@@ -67,6 +67,8 @@ void close()
 
 	IMG_Quit();
 	SDL_Quit();
+	Mix_Quit();
+	TTF_Quit();
 }
 void SetAll()
 {

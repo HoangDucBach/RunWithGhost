@@ -104,7 +104,6 @@ void Button::CheckActive(SDL_Event& event)
 			IsSelected = false;
 			temp = false;
 		}
-		std::cout << IsSelected << "\n";
 	}
 }
 void Button::RenderCopy(SDL_Renderer* screen)

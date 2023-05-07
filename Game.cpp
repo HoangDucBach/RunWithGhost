@@ -32,7 +32,7 @@ void Game::SetGame(SDL_Renderer* screen, Mouse& mouse,const int& charactertype)
 	//Build VectorObsMove
 	for (int i = 0; i < SizeVOM; i++)
 	{
-		Object obj({ Random(-100,2000),Random(1700,3000),66,11 });
+		Object obj({ Random(-100,2000),Random(1200,3000),66,11 });
 		obj.SetObject("Img/Box.png", screen);
 		VectorObsMove.push_back(obj);
 	}
@@ -57,11 +57,11 @@ void Game::SetGame(SDL_Renderer* screen, Mouse& mouse,const int& charactertype)
 	}
 	//Build Character
 	if(charactertype==0)
-		(*character).SetCharacter("Img/Character.png", screen, charactertype);
+		character->SetCharacter("Img/Character.png", screen, charactertype);
 	if(charactertype==1)
-		(*character).SetCharacter("Img/Character Green.png", screen, charactertype);
+		character->SetCharacter("Img/Character Green.png", screen, charactertype);
 	if(charactertype==2)
-		(*character).SetCharacter("Img/Character Pink.png", screen, charactertype);
+		character->SetCharacter("Img/Character Pink.png", screen, charactertype);
 	//Build Boss
 	boss.SetBoss("Img/Boss Frame.png",screen);
 	//Build Background
@@ -136,7 +136,7 @@ void Game::ResetGame(SDL_Renderer*screen,const int & charactertype)
 		VectorObsMove[i].ResetDefault({ Random(-100,2000),Random(1700,3000) });
 	}
 	//Build Character
-	(*character).ResetDefault();
+	character->ResetDefault();
 	//Build Boss
 	boss.ResetDefault();
 	//Build Boss Rambo
@@ -177,7 +177,7 @@ void Game::CountTime(SDL_Renderer* screen)
 	if (COUNT == 3)
 	{
 		SDL_DestroyTexture(texcount);
-		SDL_Surface* surfacecount = TTF_RenderText_Solid(fontcount, "3", { 73,71,71,255 });
+		SDL_Surface* surfacecount = TTF_RenderText_Solid(fontcount, "3", { 140,255,78,255 });
 		rectcount = { x_count,y_count,surfacecount->w,surfacecount->h };
 		texcount = SDL_CreateTextureFromSurface(screen, surfacecount);
 		SDL_FreeSurface(surfacecount);
@@ -186,7 +186,7 @@ void Game::CountTime(SDL_Renderer* screen)
 	if (COUNT == 2)
 	{
 		SDL_DestroyTexture(texcount);
-		SDL_Surface* surfacecount = TTF_RenderText_Solid(fontcount, "2", { 73,71,71,255 });
+		SDL_Surface* surfacecount = TTF_RenderText_Solid(fontcount, "2", { 140,255,78,255 });
 		rectcount = { x_count,y_count,surfacecount->w,surfacecount->h };
 		texcount = SDL_CreateTextureFromSurface(screen, surfacecount);
 		SDL_FreeSurface(surfacecount);
@@ -195,7 +195,7 @@ void Game::CountTime(SDL_Renderer* screen)
 	if (COUNT == 1)
 	{
 		SDL_DestroyTexture(texcount);
-		SDL_Surface* surfacecount = TTF_RenderText_Solid(fontcount, "1", { 73,71,71,255 });
+		SDL_Surface* surfacecount = TTF_RenderText_Solid(fontcount, "1", { 140,255,78,255 });
 		rectcount = { x_count,y_count,surfacecount->w,surfacecount->h };
 		texcount = SDL_CreateTextureFromSurface(screen, surfacecount);
 		SDL_FreeSurface(surfacecount);
@@ -258,7 +258,7 @@ void Game::RunGame(SDL_Renderer* screen, Mouse& mouse,bool& check,const int & ch
 					PAUSE = !PAUSE;
 				}
 				if(!PAUSE)
-					(*character).ControlCharacter(event, (*character).speed,screen,PLAY,PAUSE);
+					character->ControlCharacter(event, character->speed,screen,PLAY,PAUSE);
 				settings.UpdateAll(screen, event, mouse, sound);
 			}
 			if (event.type == SDL_MOUSEBUTTONUP)
@@ -298,7 +298,7 @@ void Game::RunGame(SDL_Renderer* screen, Mouse& mouse,bool& check,const int & ch
 				COUNTTIME = 0;
 			}
 		}
-		if ((*character).speed!=0 && LEVEL<5 && PLAY && !PAUSE && !(*character).fast)
+		if (character->speed!=0 && LEVEL<5 && PLAY && !PAUSE && !character->fast)
 		{
 			if (character->speed >=1)
 				LEVEL = 1;
@@ -318,7 +318,7 @@ void Game::RunGame(SDL_Renderer* screen, Mouse& mouse,bool& check,const int & ch
 			texinfo = LoadIMG(screen, "Img/Infomation Fire.png");
 			backgroundfire.RenderCopy(screen, NULL);
 			fire.RenderCopy(screen);
-			if(!PAUSE)
+			if(!PAUSE && PLAY)
 			{
 				fire.CheckDanger((*character), PLAY);
 				fire.Minimum();
@@ -333,7 +333,6 @@ void Game::RunGame(SDL_Renderer* screen, Mouse& mouse,bool& check,const int & ch
 			SDL_RenderCopy(screen, texinfo, NULL, &rectinfo);
 			SDL_DestroyTexture(texinfo);
 		}
-		(*character).RenderCopy(screen,PLAY);
 		if(!PAUSE)
 		{
 			character->UpdateInfo(screen, METERCOUNT, SPEEDCOUNT, PLAY);
@@ -341,10 +340,10 @@ void Game::RunGame(SDL_Renderer* screen, Mouse& mouse,bool& check,const int & ch
 		}
 		if(!PAUSE)
 		{
-			shieldred.AnimationObject((*character).speed, PLAY);
-			shield.AnimationObject((*character).speed, PLAY);
-			mini.AnimationObject((*character).speed, PLAY);
-			fast.AnimationObject((*character).speed, PLAY);
+			shieldred.AnimationObject(character->speed, PLAY);
+			shield.AnimationObject(character->speed, PLAY);
+			mini.AnimationObject(character->speed, PLAY);
+			fast.AnimationObject(character->speed, PLAY);
 			bossrambo.AnimationBossRambo(PLAY);
 			bossrambo.BossShot((*character), bullets, PLAY);
 			boss.BossCatch((*character), PLAY);
@@ -359,11 +358,13 @@ void Game::RunGame(SDL_Renderer* screen, Mouse& mouse,bool& check,const int & ch
 		fast.RenderCopy(screen);
 		bossrambo.RenderCopy(screen,bullets,PLAY,PAUSE);
 		boss.RenderCopy(screen,PLAY,PAUSE);
+		character->RenderCopy(screen, PLAY);
 		if(LEVEL<=5)
 		switch (LEVEL)
 		{
 		case 1:
 			SizeVO = 5;
+			SizeBlade = 0;
 			break;
 		case 2:
 			SizeBlade = 1;
@@ -383,9 +384,9 @@ void Game::RunGame(SDL_Renderer* screen, Mouse& mouse,bool& check,const int & ch
 			SizeVO = 30;
 			for (int i = 0; i < 30; i++)
 			{
-				VectorObs[i].ImpactObject((*character), (*character).speed, (*character).shield, PLAY);
+				VectorObs[i].ImpactObject((*character), character->speed, character->shield, PLAY);
 				if (!PAUSE)
-					VectorObs[i].AnimationObject((*character).speed, VectorObs, PLAY);
+					VectorObs[i].AnimationObject(character->speed, VectorObs, PLAY);
 				VectorObs[i].RenderCopy(screen);
 			}
 			break;
@@ -398,8 +399,8 @@ void Game::RunGame(SDL_Renderer* screen, Mouse& mouse,bool& check,const int & ch
 		{
 			if (!PAUSE && PLAY)
 			{
-				blades[i].ImpactBlade((*character), PLAY, (*character).shield);
-				blades[i].AnimationBlade((*character).speed);
+				blades[i].ImpactBlade((*character), PLAY, character->shield);
+				blades[i].AnimationBlade(character->speed);
 			}
 			blades[i].RenderCopy(screen);
 		}
@@ -408,8 +409,8 @@ void Game::RunGame(SDL_Renderer* screen, Mouse& mouse,bool& check,const int & ch
 		{
 			if (!PAUSE && PLAY)
 			{
-				VectorObsMove[i].AnimationObject((*character).speed, VectorObs, PLAY);
-				VectorObsMove[i].ImpactObject((*character), (*character).speed, (*character).shield, PLAY);
+				VectorObsMove[i].AnimationObject(character->speed, VectorObs, PLAY);
+				VectorObsMove[i].ImpactObject((*character), character->speed, character->shield, PLAY);
 			}
 			VectorObsMove[i].MoveObject();
 			VectorObsMove[i].RenderCopy(screen);
@@ -419,8 +420,8 @@ void Game::RunGame(SDL_Renderer* screen, Mouse& mouse,bool& check,const int & ch
 		{
 			if (!PAUSE && PLAY)
 			{
-				VectorObs[i].AnimationObject((*character).speed, VectorObs, PLAY);
-				VectorObs[i].ImpactObject((*character), (*character).speed, (*character).shield, PLAY);
+				VectorObs[i].AnimationObject(character->speed, VectorObs, PLAY);
+				VectorObs[i].ImpactObject((*character), character->speed, character->shield, PLAY);
 			}
 			VectorObs[i].RenderCopy(screen);
 		}
@@ -441,7 +442,6 @@ void Game::RunGame(SDL_Renderer* screen, Mouse& mouse,bool& check,const int & ch
 		CountTime(screen);
 		if (homebutton.IsSelected)
 		{
-			//DestroyGame();
 			backgroundmusic.Pause();
 			complete->show = false;
 			RUN = false;
@@ -451,10 +451,10 @@ void Game::RunGame(SDL_Renderer* screen, Mouse& mouse,bool& check,const int & ch
 		if (complete->show)
 		{
 			int m = std::stoi(bestscore.substr(0, bestscore.find("km")))*1000+std::stoi(bestscore.substr(bestscore.find("km")+2, bestscore.find("m")));
-			if(m< (*character).meter*1000+METERCOUNT)
+			if(m< character->meter*1000+METERCOUNT)
 			{
-				bestscore = to_string((*character).meter) + "km" + to_string(METERCOUNT) + "m";
-				bestspeed = to_string((*character).speed) + "mph";
+				bestscore = to_string(character->meter) + "km" + to_string(METERCOUNT) + "m";
+				bestspeed = to_string(character->speed) + "mph";
 				std::fstream file_output;
 				file_output.open("Input.INP");
 				file_output << bestscore;

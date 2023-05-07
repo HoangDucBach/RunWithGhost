@@ -234,6 +234,5 @@ void Home::RenderCopy(SDL_Renderer* screen,SDL_Event& event,SDL_Window* window)
 			backgroundmusic.Resume();
 		}
 		SDL_RenderPresent(screen);
-	std::cout << sizeof(Complete) << "\n";
 	}
 }

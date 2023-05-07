@@ -19,10 +19,6 @@ Object::~Object() {}
 void Object::SetObject(std::string path,SDL_Renderer* screen)
 {
 	tex = LoadIMG(screen, path.c_str());
-	if (path == "Img/Obs 4.png" || path == "Img/Obs 5.png")
-	{
-		mini = true;
-	}
 }
 SDL_Rect Object::GetRect()
 {
